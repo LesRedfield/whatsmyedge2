@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+
+  "name": "Well Traveled",
+  "description": "This extension allows the user to prices of flights to destinations on the current page.",
+  "version": "1.0",
+  "options_page": "options.html",
+  "permissions": [
+      "http://api.sandbox.amadeus.com/*",
+      "https://api.test.sabre.com/*"
+  ],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Click here!"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+      {
+          "matches": [
+              "*://*/*"
+          ],
+          "js": [
+              "jquery-3.2.1.min.js",
+              "content.js"
+          ],
+          "run_at": "document_end"
+      }
+  ]
+}
