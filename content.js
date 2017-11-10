@@ -1,6 +1,6 @@
 const playerTables = Array.from(document.body.getElementsByTagName( 'table' ));
 
-console.log(playerTables);
+// console.log(playerTables);
 
 const body = document.body;
 const totalsContainer = document.createElement('div');
