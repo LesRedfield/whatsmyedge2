@@ -1,4 +1,4 @@
-# WhatsMyEdge Chrome Tab
+# WhatsMyEdge Chrome Extension
 
 This is a browser extension to view aggregated statistics of your Nitrogen Sports (nitrogensports.eu) wager performance. Once the extension is enabled, simply click 'View All' next to 'Graded Wagers' from your 'My Wagers' page, or just visit 'nitrogensports.eu/mywagerslog/'.
 
