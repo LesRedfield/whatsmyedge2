@@ -1,18 +1,15 @@
 {
   "manifest_version": 2,
 
-  "name": "Well Traveled",
-  "description": "This extension allows the user to prices of flights to destinations on the current page.",
-  "version": "1.0",
+  "name": "WhatsMyEdge2",
+  "description": "Do you even have an edge?",
+  "version": "2.0",
   "options_page": "options.html",
   "permissions": [
-      "http://api.sandbox.amadeus.com/*",
-      "https://api.test.sabre.com/*"
+
   ],
   "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html",
-    "default_title": "Click here!"
+
   },
   "permissions": [
     "activeTab",
@@ -21,11 +18,18 @@
   "content_scripts": [
       {
           "matches": [
-              "*://*/*"
+              "https://nitrogensports.eu/mywagerslog/"
           ],
           "js": [
               "jquery-3.2.1.min.js",
+              "edge.js",
+              "fetchBets.js",
+              "totalsList.js",
+              "wagerTable.js",
               "content.js"
+          ],
+          "css": [
+            "edge.css"
           ],
           "run_at": "document_end"
       }

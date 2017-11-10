@@ -1,79 +1,99 @@
-const airports = {
-  "Atlanta": "ATL",
-  "Boston": "BOS",
-  "Chicago": "ORD",
-  "Dallas": "DFW",
-  "Las Vegas": "LAS",
-  "Miami": "MIA",
-  "Los Angeles": "LAX",
-  "Seattle": "SEA",
-  "Newark": "EWR"
-};
+const playerTables = Array.from(document.body.getElementsByTagName( 'table' ));
 
-const counts = {};
-const foundArr = [];
-const foundNamesArr = [];
+console.log(playerTables);
 
-var elements = document.getElementsByTagName('*');
+const body = document.body;
+const totalsContainer = document.createElement('div');
 
-for (var i = 0; i < elements.length; i++) {
-    var element = elements[i];
+const betsDropdown = document.createElement('select');
+const sportsDropdown = document.createElement('select');
+const leaguesDropdown = document.createElement('select');
+const teamsDropdown = document.createElement('select');
 
-    for (var j = 0; j < element.childNodes.length; j++) {
-        var node = element.childNodes[j];
+const betsListBody = document.createElement('tbody');
+const betsListHeader = document.createElement('tr');
 
-        if (node.nodeType === 3) {
-            var text = node.nodeValue.toUpperCase();
+let bets = [];
 
-            Object.keys(airports).forEach(airport => {
-              if (text.indexOf(airport.toUpperCase()) !== -1) {
-                console.log('found 1: ' + airport);
+const name = 'Casey';
 
-                if (counts[airport]) {
-                  counts[airport] += 1;
-                } else {
-                  counts[airport] = 1;
-                }
+  bets = fetchBets(playerTables, name);
 
-                if (!foundArr.includes(airports[airport])) {
-                  foundNamesArr.push([airports[airport], airport]);
+  const sports = [];
 
-                  foundArr.push(airports[airport]);
-                }
-              }
-            });
-        }
-    }
-}
+  bets.forEach((bet) => {
+      if (!sports.includes(bet.sport)) {
+          sports.push(bet.sport);
+      }
+  });
 
-// Listen for messages from the popup
-chrome.runtime.onMessage.addListener(function (msg, sender, response) {
-  // First, validate the message's structure
-  if ((msg.from === 'popup') && (msg.subject === 'DOMInfo')) {
-    // Collect the necessary data
-    // (For your specific requirements `document.querySelectorAll(...)`
-    //  should be equivalent to jquery's `$(...)`)
-    // var domInfo = foundNamesArr;
-    // console.log(domInfo);
+  // const totalsContainer = document.createElement('div');
+  // body.appendChild(totalsContainer);
 
-    const domInfo = Object.keys(counts).map(airportCity => {
-      return {
-        city: airportCity,
-        code: airports[airportCity],
-        count: counts[airportCity]
-      };
-    }).sort((a, b) => {
-      return b.count - a.count;
-    });
+  const container = document.createElement('div');
+  container.appendChild(totalsContainer);
 
-    console.log(domInfo);
+  // $('body').prepend(totalsContainer);
 
-    // Directly respond to the sender (popup),
-    // through the specified callback */
-    response(domInfo);
-  }
-});
+  // const sportsDropdown = document.createElement('select');
+  sportsDropdown.innerHTML = `<option value="All">All Sports</option>`;
 
-// chrome.runtime.sendMessage({destinations: foundArr}, function(response) {
-//   console.log(response);
-// });
+  // const leaguesDropdown = document.createElement('select');
+  leaguesDropdown.innerHTML = `<option value="All">All Leagues</option>`;
+
+  // const teamsDropdown = document.createElement('select');
+  teamsDropdown.innerHTML = `<option value="All">All Teams</option>`;
+
+
+  const betsList = document.createElement('table');
+  // const betsListBody = document.createElement('tbody');
+  // const betsListHeader = document.createElement('tr');
+  betsListHeader.innerHTML = `
+      <tr>
+          <td id="user"></td>
+          <td id="sport-header"></td>
+          <td id="league-header"></td>
+          <td id="team-header"></td>
+          <td>Opponent</td>
+          <td>Type</td>
+          <td>Line</td>
+          <td>Odds</td>
+          <td>Risk</td>
+          <td>Reward</td>
+          <td>Result</td>
+      </tr>
+  `;
+  betsListBody.appendChild(betsListHeader);
+  betsList.appendChild(betsListBody);
+  // body.appendChild(betsList);
+  container.appendChild(betsList);
+  container.classList.add('wme');
+
+  $('body').prepend(container);
+
+  const sportHeader = document.getElementById('sport-header');
+  const leagueHeader = document.getElementById('league-header');
+  const teamHeader = document.getElementById('team-header');
+  sportHeader.appendChild(sportsDropdown);
+  leagueHeader.appendChild(leaguesDropdown);
+  teamHeader.appendChild(teamsDropdown);
+
+  const userHeader = document.getElementById('user');
+  userHeader.appendChild(betsDropdown);
+
+
+  sports.forEach((sport) => {
+      sportsDropdown.innerHTML += `<option value=${sport}>${sport}</option>`;
+  });
+
+  let displayBets = bets;
+
+  sportsDropdown.addEventListener('change', handleSportChange);
+  leaguesDropdown.addEventListener('change', handleLeagueChange);
+  teamsDropdown.addEventListener('change', handleTeamChange);
+  betsDropdown.addEventListener('change', handleBetsChange);
+
+
+  dispBets(displayBets);
+
+  wagerTable(playerTables);
